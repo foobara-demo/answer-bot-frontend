@@ -1,0 +1,23 @@
+[
+  "FoobaraDemo/AnswerBot/Ask/Errors.ts",
+  "FoobaraDemo/AnswerBot/Ask/Inputs.ts",
+  "FoobaraDemo/AnswerBot/Ask/Result.ts",
+  "FoobaraDemo/AnswerBot/Ask/index.ts",
+  "FoobaraDemo/AnswerBot/Ask/manifest.json",
+  "FoobaraDemo/AnswerBot/config.ts",
+  "FoobaraDemo/AnswerBot/index.ts",
+  "FoobaraDemo/AnswerBot/manifest.json",
+  "FoobaraDemo/config.ts",
+  "FoobaraDemo/index.ts",
+  "FoobaraDemo/manifest.json",
+  "base/DataPath.ts",
+  "base/Entity.ts",
+  "base/Error.ts",
+  "base/Model.ts",
+  "base/Outcome.ts",
+  "base/RemoteCommand.ts",
+  "base/processors/Foobara/Value/Processor/CannotCastError.ts",
+  "base/processors/attributes/SupportedProcessors/UnexpectedAttributesError.ts",
+  "base/processors/attributes/SupportedValidators/MissingRequiredAttributeError.ts",
+  "manifest.json"
+]

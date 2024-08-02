@@ -1,0 +1,27 @@
+{
+  "scoped_path": [
+    "AnswerBot"
+  ],
+  "scoped_name": "AnswerBot",
+  "scoped_short_name": "AnswerBot",
+  "scoped_prefix": null,
+  "scoped_full_path": [
+    "FoobaraDemo",
+    "AnswerBot"
+  ],
+  "scoped_full_name": "FoobaraDemo::AnswerBot",
+  "scoped_category": "domain",
+  "reference": "FoobaraDemo::AnswerBot",
+  "domain": "FoobaraDemo::AnswerBot",
+  "organization": "FoobaraDemo",
+  "parent": [
+    "organization",
+    "FoobaraDemo"
+  ],
+  "commands": [
+    "FoobaraDemo::AnswerBot::Ask"
+  ],
+  "types": [
+
+  ]
+}

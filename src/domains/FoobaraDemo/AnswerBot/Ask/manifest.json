@@ -1,0 +1,147 @@
+{
+  "scoped_path": [
+    "Ask"
+  ],
+  "scoped_name": "Ask",
+  "scoped_short_name": "Ask",
+  "scoped_prefix": null,
+  "scoped_full_path": [
+    "FoobaraDemo",
+    "AnswerBot",
+    "Ask"
+  ],
+  "scoped_full_name": "FoobaraDemo::AnswerBot::Ask",
+  "scoped_category": "command",
+  "reference": "FoobaraDemo::AnswerBot::Ask",
+  "domain": "FoobaraDemo::AnswerBot",
+  "organization": "FoobaraDemo",
+  "parent": [
+    "domain",
+    "FoobaraDemo::AnswerBot"
+  ],
+  "types_depended_on": [
+    "array",
+    "attributes",
+    "duck",
+    "string",
+    "symbol"
+  ],
+  "inputs_types_depended_on": [
+    "array",
+    "attributes",
+    "duck",
+    "string",
+    "symbol"
+  ],
+  "result_types_depended_on": [
+    "string"
+  ],
+  "errors_types_depended_on": [
+    "array",
+    "attributes",
+    "duck",
+    "symbol"
+  ],
+  "possible_errors": {
+    "data.cannot_cast": {
+      "category": "data",
+      "symbol": "cannot_cast",
+      "key": "data.cannot_cast",
+      "error": "Foobara::Value::Processor::Casting::CannotCastError",
+      "processor_class": "Foobara::Value::Processor::Casting",
+      "processor_manifest_data": {
+        "casting": {
+          "cast_to": {
+            "type": "attributes",
+            "element_type_declarations": {
+              "question": {
+                "description": "whatever you want to know!",
+                "type": "string"
+              }
+            },
+            "required": [
+              "question"
+            ]
+          }
+        }
+      }
+    },
+    "data.missing_required_attribute": {
+      "category": "data",
+      "symbol": "missing_required_attribute",
+      "key": "data.missing_required_attribute",
+      "error": "attributes::SupportedValidators::Required::MissingRequiredAttributeError",
+      "processor_class": "Foobara::Value::Processor::Pipeline",
+      "processor_manifest_data": {
+        "pipeline": null
+      }
+    },
+    "data.question.cannot_cast": {
+      "path": [
+        "question"
+      ],
+      "category": "data",
+      "symbol": "cannot_cast",
+      "key": "data.question.cannot_cast",
+      "error": "Foobara::Value::Processor::Casting::CannotCastError",
+      "processor_manifest_data": {
+        "casting": {
+          "cast_to": {
+            "description": "whatever you want to know!",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "data.question.missing_required_attribute": {
+      "path": [
+        "question"
+      ],
+      "category": "data",
+      "symbol": "missing_required_attribute",
+      "key": "data.question.missing_required_attribute",
+      "error": "attributes::SupportedValidators::Required::MissingRequiredAttributeError",
+      "processor_class": "attributes::SupportedValidators::Required",
+      "processor_manifest_data": {
+        "required": [
+          "question"
+        ]
+      }
+    },
+    "data.unexpected_attributes": {
+      "category": "data",
+      "symbol": "unexpected_attributes",
+      "key": "data.unexpected_attributes",
+      "error": "attributes::SupportedProcessors::ElementTypeDeclarations::UnexpectedAttributesError",
+      "processor_class": "attributes::SupportedProcessors::ElementTypeDeclarations",
+      "processor_manifest_data": {
+        "element_type_declarations": {
+          "question": {
+            "description": "whatever you want to know!",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "inputs_type": {
+    "type": "attributes",
+    "element_type_declarations": {
+      "question": {
+        "description": "whatever you want to know!",
+        "type": "string"
+      }
+    },
+    "required": [
+      "question"
+    ]
+  },
+  "description": "Ask a question and receive the knowledge you seek.",
+  "result_type": {
+    "type": "string"
+  },
+  "serializers": [
+    "Foobara::CommandConnectors::Serializers::ErrorsSerializer",
+    "Foobara::CommandConnectors::Serializers::JsonSerializer"
+  ]
+}
