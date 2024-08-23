@@ -59,11 +59,21 @@
                   "question": {
                     "description": "whatever you want to know!",
                     "type": "string"
+                  },
+                  "service": {
+                    "one_of": [
+                      "open-ai",
+                      "anthropic"
+                    ],
+                    "type": "string"
                   }
                 },
                 "required": [
                   "question"
-                ]
+                ],
+                "defaults": {
+                  "service": "open-ai"
+                }
               }
             }
           }
@@ -110,6 +120,41 @@
             ]
           }
         },
+        "data.service.cannot_cast": {
+          "path": [
+            "service"
+          ],
+          "category": "data",
+          "symbol": "cannot_cast",
+          "key": "data.service.cannot_cast",
+          "error": "Foobara::Value::Processor::Casting::CannotCastError",
+          "processor_manifest_data": {
+            "casting": {
+              "cast_to": {
+                "one_of": [
+                  "open-ai",
+                  "anthropic"
+                ],
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data.service.value_not_valid": {
+          "path": [
+            "service"
+          ],
+          "category": "data",
+          "symbol": "value_not_valid",
+          "key": "data.service.value_not_valid",
+          "error": "duck::SupportedValidators::OneOf::ValueNotValidError",
+          "processor_manifest_data": {
+            "one_of": [
+              "open-ai",
+              "anthropic"
+            ]
+          }
+        },
         "data.unexpected_attributes": {
           "category": "data",
           "symbol": "unexpected_attributes",
@@ -121,22 +166,43 @@
               "question": {
                 "description": "whatever you want to know!",
                 "type": "string"
+              },
+              "service": {
+                "one_of": [
+                  "open-ai",
+                  "anthropic"
+                ],
+                "type": "string"
               }
             }
           }
         }
       },
+      "depends_on": [
+        "Foobara::Ai::AnthropicApi::CreateMessage",
+        "FoobaraDemo::OpenAiApi::CreateChatCompletion"
+      ],
       "inputs_type": {
         "type": "attributes",
         "element_type_declarations": {
           "question": {
             "description": "whatever you want to know!",
             "type": "string"
+          },
+          "service": {
+            "one_of": [
+              "open-ai",
+              "anthropic"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "question"
-        ]
+        ],
+        "defaults": {
+          "service": "open-ai"
+        }
       },
       "description": "Ask a question and receive the knowledge you seek.",
       "result_type": {
@@ -149,6 +215,37 @@
     }
   },
   "domain": {
+    "FoobaraDemo::AnswerBot": {
+      "scoped_path": [
+        "AnswerBot"
+      ],
+      "scoped_name": "AnswerBot",
+      "scoped_short_name": "AnswerBot",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "FoobaraDemo",
+        "AnswerBot"
+      ],
+      "scoped_full_name": "FoobaraDemo::AnswerBot",
+      "scoped_category": "domain",
+      "reference": "FoobaraDemo::AnswerBot",
+      "domain": "FoobaraDemo::AnswerBot",
+      "organization": "FoobaraDemo",
+      "parent": [
+        "organization",
+        "FoobaraDemo"
+      ],
+      "commands": [
+        "FoobaraDemo::AnswerBot::Ask"
+      ],
+      "types": [
+
+      ],
+      "depends_on": [
+        "Foobara::Ai::AnthropicApi",
+        "FoobaraDemo::OpenAiApi"
+      ]
+    },
     "global_organization::global_domain": {
       "scoped_path": [
 
@@ -185,36 +282,52 @@
         "string",
         "symbol"
       ]
-    },
-    "FoobaraDemo::AnswerBot": {
-      "scoped_path": [
-        "AnswerBot"
-      ],
-      "scoped_name": "AnswerBot",
-      "scoped_short_name": "AnswerBot",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "FoobaraDemo",
-        "AnswerBot"
-      ],
-      "scoped_full_name": "FoobaraDemo::AnswerBot",
-      "scoped_category": "domain",
-      "reference": "FoobaraDemo::AnswerBot",
-      "domain": "FoobaraDemo::AnswerBot",
-      "organization": "FoobaraDemo",
-      "parent": [
-        "organization",
-        "FoobaraDemo"
-      ],
-      "commands": [
-        "FoobaraDemo::AnswerBot::Ask"
-      ],
-      "types": [
-
-      ]
     }
   },
   "error": {
+    "Foobara::Value::DataError": {
+      "scoped_path": [
+        "DataError"
+      ],
+      "scoped_name": "DataError",
+      "scoped_short_name": "DataError",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "Foobara",
+        "Value",
+        "DataError"
+      ],
+      "scoped_full_name": "Foobara::Value::DataError",
+      "scoped_category": "error",
+      "reference": "Foobara::Value::DataError",
+      "domain": "Foobara::Value",
+      "organization": "Foobara",
+      "parent": [
+        "domain",
+        "Foobara::Value"
+      ],
+      "types_depended_on": [
+        "array",
+        "attributes",
+        "duck",
+        "symbol"
+      ],
+      "category": "data",
+      "symbol": "data",
+      "context_type_declaration": {
+        "type": "attributes",
+        "element_type_declarations": {
+          "attribute_name": {
+            "type": "symbol"
+          },
+          "value": {
+            "type": "duck"
+          }
+        }
+      },
+      "is_fatal": false,
+      "error_class": "Foobara::Value::DataError"
+    },
     "Foobara::Value::Processor::Casting::CannotCastError": {
       "scoped_path": [
         "CannotCastError"
@@ -264,46 +377,53 @@
       "error_class": "Foobara::Value::Processor::Casting::CannotCastError",
       "base_error": "Foobara::Value::DataError"
     },
-    "attributes::SupportedValidators::Required::MissingRequiredAttributeError": {
+    "array::SupportedValidators::Size::IncorrectTupleSizeError": {
       "scoped_path": [
-        "MissingRequiredAttributeError"
+        "IncorrectTupleSizeError"
       ],
-      "scoped_name": "MissingRequiredAttributeError",
-      "scoped_short_name": "MissingRequiredAttributeError",
+      "scoped_name": "IncorrectTupleSizeError",
+      "scoped_short_name": "IncorrectTupleSizeError",
       "scoped_prefix": null,
       "scoped_full_path": [
-        "attributes",
+        "array",
         "SupportedValidators",
-        "Required",
-        "MissingRequiredAttributeError"
+        "Size",
+        "IncorrectTupleSizeError"
       ],
-      "scoped_full_name": "attributes::SupportedValidators::Required::MissingRequiredAttributeError",
+      "scoped_full_name": "array::SupportedValidators::Size::IncorrectTupleSizeError",
       "scoped_category": "error",
-      "reference": "attributes::SupportedValidators::Required::MissingRequiredAttributeError",
+      "reference": "array::SupportedValidators::Size::IncorrectTupleSizeError",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "processor_class",
-        "attributes::SupportedValidators::Required"
+        "array::SupportedValidators::Size"
       ],
       "types_depended_on": [
         "array",
         "attributes",
         "duck",
+        "integer",
         "symbol"
       ],
       "category": "data",
-      "symbol": "missing_required_attribute",
+      "symbol": "incorrect_tuple_size",
       "context_type_declaration": {
         "type": "attributes",
         "element_type_declarations": {
-          "attribute_name": {
-            "type": "symbol"
+          "expected_size": {
+            "type": "integer"
+          },
+          "actual_size": {
+            "type": "integer"
+          },
+          "value": {
+            "type": "array"
           }
         }
       },
-      "is_fatal": true,
-      "error_class": "Foobara::BuiltinTypes::Attributes::SupportedValidators::Required::MissingRequiredAttributeError",
+      "is_fatal": false,
+      "error_class": "Foobara::BuiltinTypes::Array::SupportedValidators::Size::IncorrectTupleSizeError",
       "base_error": "Foobara::Value::DataError"
     },
     "attributes::SupportedProcessors::ElementTypeDeclarations::UnexpectedAttributesError": {
@@ -357,26 +477,27 @@
       "error_class": "Foobara::BuiltinTypes::Attributes::SupportedProcessors::ElementTypeDeclarations::UnexpectedAttributesError",
       "base_error": "Foobara::Value::DataError"
     },
-    "Foobara::Value::DataError": {
+    "attributes::SupportedValidators::Required::MissingRequiredAttributeError": {
       "scoped_path": [
-        "DataError"
+        "MissingRequiredAttributeError"
       ],
-      "scoped_name": "DataError",
-      "scoped_short_name": "DataError",
+      "scoped_name": "MissingRequiredAttributeError",
+      "scoped_short_name": "MissingRequiredAttributeError",
       "scoped_prefix": null,
       "scoped_full_path": [
-        "Foobara",
-        "Value",
-        "DataError"
+        "attributes",
+        "SupportedValidators",
+        "Required",
+        "MissingRequiredAttributeError"
       ],
-      "scoped_full_name": "Foobara::Value::DataError",
+      "scoped_full_name": "attributes::SupportedValidators::Required::MissingRequiredAttributeError",
       "scoped_category": "error",
-      "reference": "Foobara::Value::DataError",
-      "domain": "Foobara::Value",
-      "organization": "Foobara",
+      "reference": "attributes::SupportedValidators::Required::MissingRequiredAttributeError",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
       "parent": [
-        "domain",
-        "Foobara::Value"
+        "processor_class",
+        "attributes::SupportedValidators::Required"
       ],
       "types_depended_on": [
         "array",
@@ -385,67 +506,17 @@
         "symbol"
       ],
       "category": "data",
-      "symbol": "data",
+      "symbol": "missing_required_attribute",
       "context_type_declaration": {
         "type": "attributes",
         "element_type_declarations": {
           "attribute_name": {
             "type": "symbol"
-          },
-          "value": {
-            "type": "duck"
           }
         }
       },
-      "is_fatal": false,
-      "error_class": "Foobara::Value::DataError"
-    },
-    "duck::SupportedValidators::OneOf::ValueNotValidError": {
-      "scoped_path": [
-        "ValueNotValidError"
-      ],
-      "scoped_name": "ValueNotValidError",
-      "scoped_short_name": "ValueNotValidError",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "duck",
-        "SupportedValidators",
-        "OneOf",
-        "ValueNotValidError"
-      ],
-      "scoped_full_name": "duck::SupportedValidators::OneOf::ValueNotValidError",
-      "scoped_category": "error",
-      "reference": "duck::SupportedValidators::OneOf::ValueNotValidError",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "processor_class",
-        "duck::SupportedValidators::OneOf"
-      ],
-      "types_depended_on": [
-        "array",
-        "attributes",
-        "duck",
-        "symbol"
-      ],
-      "category": "data",
-      "symbol": "value_not_valid",
-      "context_type_declaration": {
-        "type": "attributes",
-        "element_type_declarations": {
-          "value": {
-            "type": "duck"
-          },
-          "valid_values": {
-            "type": "array",
-            "element_type_declaration": {
-              "type": "duck"
-            }
-          }
-        }
-      },
-      "is_fatal": false,
-      "error_class": "Foobara::BuiltinTypes::Duck::SupportedValidators::OneOf::ValueNotValidError",
+      "is_fatal": true,
+      "error_class": "Foobara::BuiltinTypes::Attributes::SupportedValidators::Required::MissingRequiredAttributeError",
       "base_error": "Foobara::Value::DataError"
     },
     "duck::SupportedValidators::InstanceOf::NotInstanceOfError": {
@@ -494,146 +565,52 @@
       "error_class": "Foobara::BuiltinTypes::Duck::SupportedValidators::InstanceOf::NotInstanceOfError",
       "base_error": "Foobara::Value::DataError"
     },
-    "array::SupportedValidators::Size::IncorrectTupleSizeError": {
+    "duck::SupportedValidators::OneOf::ValueNotValidError": {
       "scoped_path": [
-        "IncorrectTupleSizeError"
+        "ValueNotValidError"
       ],
-      "scoped_name": "IncorrectTupleSizeError",
-      "scoped_short_name": "IncorrectTupleSizeError",
+      "scoped_name": "ValueNotValidError",
+      "scoped_short_name": "ValueNotValidError",
       "scoped_prefix": null,
       "scoped_full_path": [
-        "array",
+        "duck",
         "SupportedValidators",
-        "Size",
-        "IncorrectTupleSizeError"
+        "OneOf",
+        "ValueNotValidError"
       ],
-      "scoped_full_name": "array::SupportedValidators::Size::IncorrectTupleSizeError",
+      "scoped_full_name": "duck::SupportedValidators::OneOf::ValueNotValidError",
       "scoped_category": "error",
-      "reference": "array::SupportedValidators::Size::IncorrectTupleSizeError",
+      "reference": "duck::SupportedValidators::OneOf::ValueNotValidError",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "processor_class",
-        "array::SupportedValidators::Size"
+        "duck::SupportedValidators::OneOf"
       ],
       "types_depended_on": [
         "array",
         "attributes",
         "duck",
-        "integer",
         "symbol"
       ],
       "category": "data",
-      "symbol": "incorrect_tuple_size",
-      "context_type_declaration": {
-        "type": "attributes",
-        "element_type_declarations": {
-          "expected_size": {
-            "type": "integer"
-          },
-          "actual_size": {
-            "type": "integer"
-          },
-          "value": {
-            "type": "array"
-          }
-        }
-      },
-      "is_fatal": false,
-      "error_class": "Foobara::BuiltinTypes::Array::SupportedValidators::Size::IncorrectTupleSizeError",
-      "base_error": "Foobara::Value::DataError"
-    },
-    "string::SupportedValidators::MaxLength::MaxLengthExceededError": {
-      "scoped_path": [
-        "MaxLengthExceededError"
-      ],
-      "scoped_name": "MaxLengthExceededError",
-      "scoped_short_name": "MaxLengthExceededError",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "string",
-        "SupportedValidators",
-        "MaxLength",
-        "MaxLengthExceededError"
-      ],
-      "scoped_full_name": "string::SupportedValidators::MaxLength::MaxLengthExceededError",
-      "scoped_category": "error",
-      "reference": "string::SupportedValidators::MaxLength::MaxLengthExceededError",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "processor_class",
-        "string::SupportedValidators::MaxLength"
-      ],
-      "types_depended_on": [
-        "array",
-        "attributes",
-        "duck",
-        "integer",
-        "string",
-        "symbol"
-      ],
-      "category": "data",
-      "symbol": "max_length_exceeded",
+      "symbol": "value_not_valid",
       "context_type_declaration": {
         "type": "attributes",
         "element_type_declarations": {
           "value": {
-            "type": "string"
-          },
-          "max_length": {
-            "type": "integer"
-          }
-        }
-      },
-      "is_fatal": false,
-      "error_class": "Foobara::BuiltinTypes::String::SupportedValidators::MaxLength::MaxLengthExceededError",
-      "base_error": "Foobara::Value::DataError"
-    },
-    "string::SupportedValidators::Matches::DoesNotMatchError": {
-      "scoped_path": [
-        "DoesNotMatchError"
-      ],
-      "scoped_name": "DoesNotMatchError",
-      "scoped_short_name": "DoesNotMatchError",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "string",
-        "SupportedValidators",
-        "Matches",
-        "DoesNotMatchError"
-      ],
-      "scoped_full_name": "string::SupportedValidators::Matches::DoesNotMatchError",
-      "scoped_category": "error",
-      "reference": "string::SupportedValidators::Matches::DoesNotMatchError",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "processor_class",
-        "string::SupportedValidators::Matches"
-      ],
-      "types_depended_on": [
-        "array",
-        "attributes",
-        "duck",
-        "string",
-        "symbol"
-      ],
-      "category": "data",
-      "symbol": "does_not_match",
-      "context_type_declaration": {
-        "type": "attributes",
-        "element_type_declarations": {
-          "value": {
-            "type": "string"
-          },
-          "regex": {
             "type": "duck"
+          },
+          "valid_values": {
+            "type": "array",
+            "element_type_declaration": {
+              "type": "duck"
+            }
           }
         }
       },
       "is_fatal": false,
-      "error_class": "Foobara::BuiltinTypes::String::SupportedValidators::Matches::DoesNotMatchError",
+      "error_class": "Foobara::BuiltinTypes::Duck::SupportedValidators::OneOf::ValueNotValidError",
       "base_error": "Foobara::Value::DataError"
     },
     "number::SupportedValidators::Max::MaxExceededError": {
@@ -727,9 +704,121 @@
       "is_fatal": false,
       "error_class": "Foobara::BuiltinTypes::Number::SupportedValidators::Min::BelowMinimumError",
       "base_error": "Foobara::Value::DataError"
+    },
+    "string::SupportedValidators::Matches::DoesNotMatchError": {
+      "scoped_path": [
+        "DoesNotMatchError"
+      ],
+      "scoped_name": "DoesNotMatchError",
+      "scoped_short_name": "DoesNotMatchError",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "string",
+        "SupportedValidators",
+        "Matches",
+        "DoesNotMatchError"
+      ],
+      "scoped_full_name": "string::SupportedValidators::Matches::DoesNotMatchError",
+      "scoped_category": "error",
+      "reference": "string::SupportedValidators::Matches::DoesNotMatchError",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "processor_class",
+        "string::SupportedValidators::Matches"
+      ],
+      "types_depended_on": [
+        "array",
+        "attributes",
+        "duck",
+        "string",
+        "symbol"
+      ],
+      "category": "data",
+      "symbol": "does_not_match",
+      "context_type_declaration": {
+        "type": "attributes",
+        "element_type_declarations": {
+          "value": {
+            "type": "string"
+          },
+          "regex": {
+            "type": "duck"
+          }
+        }
+      },
+      "is_fatal": false,
+      "error_class": "Foobara::BuiltinTypes::String::SupportedValidators::Matches::DoesNotMatchError",
+      "base_error": "Foobara::Value::DataError"
+    },
+    "string::SupportedValidators::MaxLength::MaxLengthExceededError": {
+      "scoped_path": [
+        "MaxLengthExceededError"
+      ],
+      "scoped_name": "MaxLengthExceededError",
+      "scoped_short_name": "MaxLengthExceededError",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "string",
+        "SupportedValidators",
+        "MaxLength",
+        "MaxLengthExceededError"
+      ],
+      "scoped_full_name": "string::SupportedValidators::MaxLength::MaxLengthExceededError",
+      "scoped_category": "error",
+      "reference": "string::SupportedValidators::MaxLength::MaxLengthExceededError",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "processor_class",
+        "string::SupportedValidators::MaxLength"
+      ],
+      "types_depended_on": [
+        "array",
+        "attributes",
+        "duck",
+        "integer",
+        "string",
+        "symbol"
+      ],
+      "category": "data",
+      "symbol": "max_length_exceeded",
+      "context_type_declaration": {
+        "type": "attributes",
+        "element_type_declarations": {
+          "value": {
+            "type": "string"
+          },
+          "max_length": {
+            "type": "integer"
+          }
+        }
+      },
+      "is_fatal": false,
+      "error_class": "Foobara::BuiltinTypes::String::SupportedValidators::MaxLength::MaxLengthExceededError",
+      "base_error": "Foobara::Value::DataError"
     }
   },
   "organization": {
+    "FoobaraDemo": {
+      "scoped_path": [
+        "FoobaraDemo"
+      ],
+      "scoped_name": "FoobaraDemo",
+      "scoped_short_name": "FoobaraDemo",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "FoobaraDemo"
+      ],
+      "scoped_full_name": "FoobaraDemo",
+      "scoped_category": "organization",
+      "reference": "FoobaraDemo",
+      "domain": "global_organization::global_domain",
+      "organization": "FoobaraDemo",
+      "domains": [
+        "FoobaraDemo::AnswerBot"
+      ]
+    },
     "global_organization": {
       "scoped_path": [
 
@@ -750,28 +839,61 @@
       "domains": [
         "global_organization::global_domain"
       ]
-    },
-    "FoobaraDemo": {
-      "scoped_path": [
-        "FoobaraDemo"
-      ],
-      "scoped_name": "FoobaraDemo",
-      "scoped_short_name": "FoobaraDemo",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "FoobaraDemo"
-      ],
-      "scoped_full_name": "FoobaraDemo",
-      "scoped_category": "organization",
-      "reference": "FoobaraDemo",
-      "domain": "global_organization::global_domain",
-      "organization": "FoobaraDemo",
-      "domains": [
-        "FoobaraDemo::AnswerBot"
-      ]
     }
   },
   "processor": {
+    "array::Casters::arrayable": {
+      "scoped_path": [
+        "Casters",
+        "arrayable"
+      ],
+      "scoped_name": "Casters::arrayable",
+      "scoped_short_name": "arrayable",
+      "scoped_prefix": [
+        "Casters"
+      ],
+      "scoped_full_path": [
+        "array",
+        "Casters",
+        "arrayable"
+      ],
+      "scoped_full_name": "array::Casters::arrayable",
+      "scoped_category": "processor",
+      "reference": "array::Casters::arrayable",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "array"
+      ],
+      "processor_class": "array::Casters::Arrayable"
+    },
+    "associative_array::Casters::array": {
+      "scoped_path": [
+        "Casters",
+        "array"
+      ],
+      "scoped_name": "Casters::array",
+      "scoped_short_name": "array",
+      "scoped_prefix": [
+        "Casters"
+      ],
+      "scoped_full_path": [
+        "associative_array",
+        "Casters",
+        "array"
+      ],
+      "scoped_full_name": "associative_array::Casters::array",
+      "scoped_category": "processor",
+      "reference": "associative_array::Casters::array",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "associative_array"
+      ],
+      "processor_class": "associative_array::Casters::Array"
+    },
     "attributes::Casters::array": {
       "scoped_path": [
         "Casters",
@@ -824,33 +946,7 @@
       ],
       "processor_class": "attributes::Casters::Hash"
     },
-    "array::Casters::arrayable": {
-      "scoped_path": [
-        "Casters",
-        "arrayable"
-      ],
-      "scoped_name": "Casters::arrayable",
-      "scoped_short_name": "arrayable",
-      "scoped_prefix": [
-        "Casters"
-      ],
-      "scoped_full_path": [
-        "array",
-        "Casters",
-        "arrayable"
-      ],
-      "scoped_full_name": "array::Casters::arrayable",
-      "scoped_category": "processor",
-      "reference": "array::Casters::arrayable",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "array"
-      ],
-      "processor_class": "array::Casters::Arrayable"
-    },
-    "symbol::Casters::string": {
+    "integer::Casters::string": {
       "scoped_path": [
         "Casters",
         "string"
@@ -861,20 +957,20 @@
         "Casters"
       ],
       "scoped_full_path": [
-        "symbol",
+        "integer",
         "Casters",
         "string"
       ],
-      "scoped_full_name": "symbol::Casters::string",
+      "scoped_full_name": "integer::Casters::string",
       "scoped_category": "processor",
-      "reference": "symbol::Casters::string",
+      "reference": "integer::Casters::string",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "symbol"
+        "integer"
       ],
-      "processor_class": "symbol::Casters::String"
+      "processor_class": "integer::Casters::String"
     },
     "string::Casters::numeric": {
       "scoped_path": [
@@ -928,33 +1024,7 @@
       ],
       "processor_class": "string::Casters::Symbol"
     },
-    "associative_array::Casters::array": {
-      "scoped_path": [
-        "Casters",
-        "array"
-      ],
-      "scoped_name": "Casters::array",
-      "scoped_short_name": "array",
-      "scoped_prefix": [
-        "Casters"
-      ],
-      "scoped_full_path": [
-        "associative_array",
-        "Casters",
-        "array"
-      ],
-      "scoped_full_name": "associative_array::Casters::array",
-      "scoped_category": "processor",
-      "reference": "associative_array::Casters::array",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "associative_array"
-      ],
-      "processor_class": "associative_array::Casters::Array"
-    },
-    "integer::Casters::string": {
+    "symbol::Casters::string": {
       "scoped_path": [
         "Casters",
         "string"
@@ -965,20 +1035,20 @@
         "Casters"
       ],
       "scoped_full_path": [
-        "integer",
+        "symbol",
         "Casters",
         "string"
       ],
-      "scoped_full_name": "integer::Casters::string",
+      "scoped_full_name": "symbol::Casters::string",
       "scoped_category": "processor",
-      "reference": "integer::Casters::string",
+      "reference": "symbol::Casters::string",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "integer"
+        "symbol"
       ],
-      "processor_class": "integer::Casters::String"
+      "processor_class": "symbol::Casters::String"
     }
   },
   "processor_class": {
@@ -1097,119 +1167,116 @@
       "name": "Foobara::Value::Processor::Pipeline",
       "processor_type": "pipeline"
     },
-    "attributes::SupportedProcessors::ElementTypeDeclarations": {
+    "array::Casters::Arrayable": {
       "scoped_path": [
-        "SupportedProcessors",
-        "ElementTypeDeclarations"
+        "Casters",
+        "Arrayable"
       ],
-      "scoped_name": "SupportedProcessors::ElementTypeDeclarations",
-      "scoped_short_name": "ElementTypeDeclarations",
+      "scoped_name": "Casters::Arrayable",
+      "scoped_short_name": "Arrayable",
       "scoped_prefix": [
-        "SupportedProcessors"
+        "Casters"
       ],
       "scoped_full_path": [
-        "attributes",
-        "SupportedProcessors",
-        "ElementTypeDeclarations"
+        "array",
+        "Casters",
+        "Arrayable"
       ],
-      "scoped_full_name": "attributes::SupportedProcessors::ElementTypeDeclarations",
+      "scoped_full_name": "array::Casters::Arrayable",
       "scoped_category": "processor_class",
-      "reference": "attributes::SupportedProcessors::ElementTypeDeclarations",
+      "reference": "array::Casters::Arrayable",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "attributes"
+        "array"
       ],
-      "name": "Foobara::BuiltinTypes::Attributes::SupportedProcessors::ElementTypeDeclarations",
-      "processor_type": "processor",
-      "error_classes": [
-        "attributes::SupportedProcessors::ElementTypeDeclarations::UnexpectedAttributesError"
-      ]
+      "name": "Foobara::BuiltinTypes::Array::Casters::Arrayable",
+      "processor_type": "caster"
     },
-    "attributes::SupportedValidators::Required": {
+    "array::SupportedProcessors::ElementTypeDeclaration": {
+      "scoped_path": [
+        "SupportedProcessors",
+        "ElementTypeDeclaration"
+      ],
+      "scoped_name": "SupportedProcessors::ElementTypeDeclaration",
+      "scoped_short_name": "ElementTypeDeclaration",
+      "scoped_prefix": [
+        "SupportedProcessors"
+      ],
+      "scoped_full_path": [
+        "array",
+        "SupportedProcessors",
+        "ElementTypeDeclaration"
+      ],
+      "scoped_full_name": "array::SupportedProcessors::ElementTypeDeclaration",
+      "scoped_category": "processor_class",
+      "reference": "array::SupportedProcessors::ElementTypeDeclaration",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "array"
+      ],
+      "name": "Foobara::BuiltinTypes::Array::SupportedProcessors::ElementTypeDeclaration",
+      "processor_type": "processor"
+    },
+    "array::SupportedValidators::Size": {
       "scoped_path": [
         "SupportedValidators",
-        "Required"
+        "Size"
       ],
-      "scoped_name": "SupportedValidators::Required",
-      "scoped_short_name": "Required",
+      "scoped_name": "SupportedValidators::Size",
+      "scoped_short_name": "Size",
       "scoped_prefix": [
         "SupportedValidators"
       ],
       "scoped_full_path": [
-        "attributes",
+        "array",
         "SupportedValidators",
-        "Required"
+        "Size"
       ],
-      "scoped_full_name": "attributes::SupportedValidators::Required",
+      "scoped_full_name": "array::SupportedValidators::Size",
       "scoped_category": "processor_class",
-      "reference": "attributes::SupportedValidators::Required",
+      "reference": "array::SupportedValidators::Size",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "attributes"
+        "array"
       ],
-      "name": "Foobara::BuiltinTypes::Attributes::SupportedValidators::Required",
+      "name": "Foobara::BuiltinTypes::Array::SupportedValidators::Size",
       "processor_type": "transformer",
       "error_classes": [
-        "attributes::SupportedValidators::Required::MissingRequiredAttributeError"
+        "array::SupportedValidators::Size::IncorrectTupleSizeError"
       ]
     },
-    "attributes::SupportedTransformers::Defaults": {
+    "associative_array::Casters::Array": {
       "scoped_path": [
-        "SupportedTransformers",
-        "Defaults"
+        "Casters",
+        "Array"
       ],
-      "scoped_name": "SupportedTransformers::Defaults",
-      "scoped_short_name": "Defaults",
+      "scoped_name": "Casters::Array",
+      "scoped_short_name": "Array",
       "scoped_prefix": [
-        "SupportedTransformers"
-      ],
-      "scoped_full_path": [
-        "attributes",
-        "SupportedTransformers",
-        "Defaults"
-      ],
-      "scoped_full_name": "attributes::SupportedTransformers::Defaults",
-      "scoped_category": "processor_class",
-      "reference": "attributes::SupportedTransformers::Defaults",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "attributes"
-      ],
-      "name": "Foobara::BuiltinTypes::Attributes::SupportedTransformers::Defaults",
-      "processor_type": "transformer"
-    },
-    "associative_array::SupportedProcessors::ValueTypeDeclaration": {
-      "scoped_path": [
-        "SupportedProcessors",
-        "ValueTypeDeclaration"
-      ],
-      "scoped_name": "SupportedProcessors::ValueTypeDeclaration",
-      "scoped_short_name": "ValueTypeDeclaration",
-      "scoped_prefix": [
-        "SupportedProcessors"
+        "Casters"
       ],
       "scoped_full_path": [
         "associative_array",
-        "SupportedProcessors",
-        "ValueTypeDeclaration"
+        "Casters",
+        "Array"
       ],
-      "scoped_full_name": "associative_array::SupportedProcessors::ValueTypeDeclaration",
+      "scoped_full_name": "associative_array::Casters::Array",
       "scoped_category": "processor_class",
-      "reference": "associative_array::SupportedProcessors::ValueTypeDeclaration",
+      "reference": "associative_array::Casters::Array",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
         "associative_array"
       ],
-      "name": "Foobara::BuiltinTypes::AssociativeArray::SupportedProcessors::ValueTypeDeclaration",
-      "processor_type": "processor"
+      "name": "Foobara::BuiltinTypes::AssociativeArray::Casters::Array",
+      "processor_type": "caster"
     },
     "associative_array::SupportedProcessors::KeyTypeDeclaration": {
       "scoped_path": [
@@ -1238,92 +1305,32 @@
       "name": "Foobara::BuiltinTypes::AssociativeArray::SupportedProcessors::KeyTypeDeclaration",
       "processor_type": "processor"
     },
-    "duck::SupportedCasters::AllowNil": {
+    "associative_array::SupportedProcessors::ValueTypeDeclaration": {
       "scoped_path": [
-        "SupportedCasters",
-        "AllowNil"
+        "SupportedProcessors",
+        "ValueTypeDeclaration"
       ],
-      "scoped_name": "SupportedCasters::AllowNil",
-      "scoped_short_name": "AllowNil",
+      "scoped_name": "SupportedProcessors::ValueTypeDeclaration",
+      "scoped_short_name": "ValueTypeDeclaration",
       "scoped_prefix": [
-        "SupportedCasters"
+        "SupportedProcessors"
       ],
       "scoped_full_path": [
-        "duck",
-        "SupportedCasters",
-        "AllowNil"
+        "associative_array",
+        "SupportedProcessors",
+        "ValueTypeDeclaration"
       ],
-      "scoped_full_name": "duck::SupportedCasters::AllowNil",
+      "scoped_full_name": "associative_array::SupportedProcessors::ValueTypeDeclaration",
       "scoped_category": "processor_class",
-      "reference": "duck::SupportedCasters::AllowNil",
+      "reference": "associative_array::SupportedProcessors::ValueTypeDeclaration",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "duck"
+        "associative_array"
       ],
-      "name": "Foobara::BuiltinTypes::Duck::SupportedCasters::AllowNil",
-      "processor_type": "caster"
-    },
-    "duck::SupportedValidators::OneOf": {
-      "scoped_path": [
-        "SupportedValidators",
-        "OneOf"
-      ],
-      "scoped_name": "SupportedValidators::OneOf",
-      "scoped_short_name": "OneOf",
-      "scoped_prefix": [
-        "SupportedValidators"
-      ],
-      "scoped_full_path": [
-        "duck",
-        "SupportedValidators",
-        "OneOf"
-      ],
-      "scoped_full_name": "duck::SupportedValidators::OneOf",
-      "scoped_category": "processor_class",
-      "reference": "duck::SupportedValidators::OneOf",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "duck"
-      ],
-      "name": "Foobara::BuiltinTypes::Duck::SupportedValidators::OneOf",
-      "processor_type": "transformer",
-      "error_classes": [
-        "duck::SupportedValidators::OneOf::ValueNotValidError"
-      ]
-    },
-    "duck::SupportedValidators::InstanceOf": {
-      "scoped_path": [
-        "SupportedValidators",
-        "InstanceOf"
-      ],
-      "scoped_name": "SupportedValidators::InstanceOf",
-      "scoped_short_name": "InstanceOf",
-      "scoped_prefix": [
-        "SupportedValidators"
-      ],
-      "scoped_full_path": [
-        "duck",
-        "SupportedValidators",
-        "InstanceOf"
-      ],
-      "scoped_full_name": "duck::SupportedValidators::InstanceOf",
-      "scoped_category": "processor_class",
-      "reference": "duck::SupportedValidators::InstanceOf",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "duck"
-      ],
-      "name": "Foobara::BuiltinTypes::Duck::SupportedValidators::InstanceOf",
-      "processor_type": "transformer",
-      "error_classes": [
-        "duck::SupportedValidators::InstanceOf::NotInstanceOfError"
-      ]
+      "name": "Foobara::BuiltinTypes::AssociativeArray::SupportedProcessors::ValueTypeDeclaration",
+      "processor_type": "processor"
     },
     "attributes::Casters::Array": {
       "scoped_path": [
@@ -1379,91 +1386,181 @@
       "name": "Foobara::BuiltinTypes::Attributes::Casters::Hash",
       "processor_type": "caster"
     },
-    "array::SupportedValidators::Size": {
-      "scoped_path": [
-        "SupportedValidators",
-        "Size"
-      ],
-      "scoped_name": "SupportedValidators::Size",
-      "scoped_short_name": "Size",
-      "scoped_prefix": [
-        "SupportedValidators"
-      ],
-      "scoped_full_path": [
-        "array",
-        "SupportedValidators",
-        "Size"
-      ],
-      "scoped_full_name": "array::SupportedValidators::Size",
-      "scoped_category": "processor_class",
-      "reference": "array::SupportedValidators::Size",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "array"
-      ],
-      "name": "Foobara::BuiltinTypes::Array::SupportedValidators::Size",
-      "processor_type": "transformer",
-      "error_classes": [
-        "array::SupportedValidators::Size::IncorrectTupleSizeError"
-      ]
-    },
-    "array::SupportedProcessors::ElementTypeDeclaration": {
+    "attributes::SupportedProcessors::ElementTypeDeclarations": {
       "scoped_path": [
         "SupportedProcessors",
-        "ElementTypeDeclaration"
+        "ElementTypeDeclarations"
       ],
-      "scoped_name": "SupportedProcessors::ElementTypeDeclaration",
-      "scoped_short_name": "ElementTypeDeclaration",
+      "scoped_name": "SupportedProcessors::ElementTypeDeclarations",
+      "scoped_short_name": "ElementTypeDeclarations",
       "scoped_prefix": [
         "SupportedProcessors"
       ],
       "scoped_full_path": [
-        "array",
+        "attributes",
         "SupportedProcessors",
-        "ElementTypeDeclaration"
+        "ElementTypeDeclarations"
       ],
-      "scoped_full_name": "array::SupportedProcessors::ElementTypeDeclaration",
+      "scoped_full_name": "attributes::SupportedProcessors::ElementTypeDeclarations",
       "scoped_category": "processor_class",
-      "reference": "array::SupportedProcessors::ElementTypeDeclaration",
+      "reference": "attributes::SupportedProcessors::ElementTypeDeclarations",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "array"
+        "attributes"
       ],
-      "name": "Foobara::BuiltinTypes::Array::SupportedProcessors::ElementTypeDeclaration",
-      "processor_type": "processor"
+      "name": "Foobara::BuiltinTypes::Attributes::SupportedProcessors::ElementTypeDeclarations",
+      "processor_type": "processor",
+      "error_classes": [
+        "attributes::SupportedProcessors::ElementTypeDeclarations::UnexpectedAttributesError"
+      ]
     },
-    "array::Casters::Arrayable": {
+    "attributes::SupportedTransformers::Defaults": {
       "scoped_path": [
-        "Casters",
-        "Arrayable"
+        "SupportedTransformers",
+        "Defaults"
       ],
-      "scoped_name": "Casters::Arrayable",
-      "scoped_short_name": "Arrayable",
+      "scoped_name": "SupportedTransformers::Defaults",
+      "scoped_short_name": "Defaults",
       "scoped_prefix": [
-        "Casters"
+        "SupportedTransformers"
       ],
       "scoped_full_path": [
-        "array",
-        "Casters",
-        "Arrayable"
+        "attributes",
+        "SupportedTransformers",
+        "Defaults"
       ],
-      "scoped_full_name": "array::Casters::Arrayable",
+      "scoped_full_name": "attributes::SupportedTransformers::Defaults",
       "scoped_category": "processor_class",
-      "reference": "array::Casters::Arrayable",
+      "reference": "attributes::SupportedTransformers::Defaults",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "array"
+        "attributes"
       ],
-      "name": "Foobara::BuiltinTypes::Array::Casters::Arrayable",
+      "name": "Foobara::BuiltinTypes::Attributes::SupportedTransformers::Defaults",
+      "processor_type": "transformer"
+    },
+    "attributes::SupportedValidators::Required": {
+      "scoped_path": [
+        "SupportedValidators",
+        "Required"
+      ],
+      "scoped_name": "SupportedValidators::Required",
+      "scoped_short_name": "Required",
+      "scoped_prefix": [
+        "SupportedValidators"
+      ],
+      "scoped_full_path": [
+        "attributes",
+        "SupportedValidators",
+        "Required"
+      ],
+      "scoped_full_name": "attributes::SupportedValidators::Required",
+      "scoped_category": "processor_class",
+      "reference": "attributes::SupportedValidators::Required",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "attributes"
+      ],
+      "name": "Foobara::BuiltinTypes::Attributes::SupportedValidators::Required",
+      "processor_type": "transformer",
+      "error_classes": [
+        "attributes::SupportedValidators::Required::MissingRequiredAttributeError"
+      ]
+    },
+    "duck::SupportedCasters::AllowNil": {
+      "scoped_path": [
+        "SupportedCasters",
+        "AllowNil"
+      ],
+      "scoped_name": "SupportedCasters::AllowNil",
+      "scoped_short_name": "AllowNil",
+      "scoped_prefix": [
+        "SupportedCasters"
+      ],
+      "scoped_full_path": [
+        "duck",
+        "SupportedCasters",
+        "AllowNil"
+      ],
+      "scoped_full_name": "duck::SupportedCasters::AllowNil",
+      "scoped_category": "processor_class",
+      "reference": "duck::SupportedCasters::AllowNil",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "duck"
+      ],
+      "name": "Foobara::BuiltinTypes::Duck::SupportedCasters::AllowNil",
       "processor_type": "caster"
     },
-    "symbol::Casters::String": {
+    "duck::SupportedValidators::InstanceOf": {
+      "scoped_path": [
+        "SupportedValidators",
+        "InstanceOf"
+      ],
+      "scoped_name": "SupportedValidators::InstanceOf",
+      "scoped_short_name": "InstanceOf",
+      "scoped_prefix": [
+        "SupportedValidators"
+      ],
+      "scoped_full_path": [
+        "duck",
+        "SupportedValidators",
+        "InstanceOf"
+      ],
+      "scoped_full_name": "duck::SupportedValidators::InstanceOf",
+      "scoped_category": "processor_class",
+      "reference": "duck::SupportedValidators::InstanceOf",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "duck"
+      ],
+      "name": "Foobara::BuiltinTypes::Duck::SupportedValidators::InstanceOf",
+      "processor_type": "transformer",
+      "error_classes": [
+        "duck::SupportedValidators::InstanceOf::NotInstanceOfError"
+      ]
+    },
+    "duck::SupportedValidators::OneOf": {
+      "scoped_path": [
+        "SupportedValidators",
+        "OneOf"
+      ],
+      "scoped_name": "SupportedValidators::OneOf",
+      "scoped_short_name": "OneOf",
+      "scoped_prefix": [
+        "SupportedValidators"
+      ],
+      "scoped_full_path": [
+        "duck",
+        "SupportedValidators",
+        "OneOf"
+      ],
+      "scoped_full_name": "duck::SupportedValidators::OneOf",
+      "scoped_category": "processor_class",
+      "reference": "duck::SupportedValidators::OneOf",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "duck"
+      ],
+      "name": "Foobara::BuiltinTypes::Duck::SupportedValidators::OneOf",
+      "processor_type": "transformer",
+      "error_classes": [
+        "duck::SupportedValidators::OneOf::ValueNotValidError"
+      ]
+    },
+    "integer::Casters::String": {
       "scoped_path": [
         "Casters",
         "String"
@@ -1474,188 +1571,20 @@
         "Casters"
       ],
       "scoped_full_path": [
-        "symbol",
+        "integer",
         "Casters",
         "String"
       ],
-      "scoped_full_name": "symbol::Casters::String",
+      "scoped_full_name": "integer::Casters::String",
       "scoped_category": "processor_class",
-      "reference": "symbol::Casters::String",
+      "reference": "integer::Casters::String",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "symbol"
+        "integer"
       ],
-      "name": "Foobara::BuiltinTypes::Symbol::Casters::String",
-      "processor_type": "caster"
-    },
-    "string::SupportedTransformers::Downcase": {
-      "scoped_path": [
-        "SupportedTransformers",
-        "Downcase"
-      ],
-      "scoped_name": "SupportedTransformers::Downcase",
-      "scoped_short_name": "Downcase",
-      "scoped_prefix": [
-        "SupportedTransformers"
-      ],
-      "scoped_full_path": [
-        "string",
-        "SupportedTransformers",
-        "Downcase"
-      ],
-      "scoped_full_name": "string::SupportedTransformers::Downcase",
-      "scoped_category": "processor_class",
-      "reference": "string::SupportedTransformers::Downcase",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "string"
-      ],
-      "name": "Foobara::BuiltinTypes::String::SupportedTransformers::Downcase",
-      "processor_type": "transformer"
-    },
-    "string::SupportedValidators::MaxLength": {
-      "scoped_path": [
-        "SupportedValidators",
-        "MaxLength"
-      ],
-      "scoped_name": "SupportedValidators::MaxLength",
-      "scoped_short_name": "MaxLength",
-      "scoped_prefix": [
-        "SupportedValidators"
-      ],
-      "scoped_full_path": [
-        "string",
-        "SupportedValidators",
-        "MaxLength"
-      ],
-      "scoped_full_name": "string::SupportedValidators::MaxLength",
-      "scoped_category": "processor_class",
-      "reference": "string::SupportedValidators::MaxLength",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "string"
-      ],
-      "name": "Foobara::BuiltinTypes::String::SupportedValidators::MaxLength",
-      "processor_type": "transformer",
-      "error_classes": [
-        "string::SupportedValidators::MaxLength::MaxLengthExceededError"
-      ]
-    },
-    "string::SupportedValidators::Matches": {
-      "scoped_path": [
-        "SupportedValidators",
-        "Matches"
-      ],
-      "scoped_name": "SupportedValidators::Matches",
-      "scoped_short_name": "Matches",
-      "scoped_prefix": [
-        "SupportedValidators"
-      ],
-      "scoped_full_path": [
-        "string",
-        "SupportedValidators",
-        "Matches"
-      ],
-      "scoped_full_name": "string::SupportedValidators::Matches",
-      "scoped_category": "processor_class",
-      "reference": "string::SupportedValidators::Matches",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "string"
-      ],
-      "name": "Foobara::BuiltinTypes::String::SupportedValidators::Matches",
-      "processor_type": "transformer",
-      "error_classes": [
-        "string::SupportedValidators::Matches::DoesNotMatchError"
-      ]
-    },
-    "string::Casters::Numeric": {
-      "scoped_path": [
-        "Casters",
-        "Numeric"
-      ],
-      "scoped_name": "Casters::Numeric",
-      "scoped_short_name": "Numeric",
-      "scoped_prefix": [
-        "Casters"
-      ],
-      "scoped_full_path": [
-        "string",
-        "Casters",
-        "Numeric"
-      ],
-      "scoped_full_name": "string::Casters::Numeric",
-      "scoped_category": "processor_class",
-      "reference": "string::Casters::Numeric",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "string"
-      ],
-      "name": "Foobara::BuiltinTypes::String::Casters::Numeric",
-      "processor_type": "caster"
-    },
-    "string::Casters::Symbol": {
-      "scoped_path": [
-        "Casters",
-        "Symbol"
-      ],
-      "scoped_name": "Casters::Symbol",
-      "scoped_short_name": "Symbol",
-      "scoped_prefix": [
-        "Casters"
-      ],
-      "scoped_full_path": [
-        "string",
-        "Casters",
-        "Symbol"
-      ],
-      "scoped_full_name": "string::Casters::Symbol",
-      "scoped_category": "processor_class",
-      "reference": "string::Casters::Symbol",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "string"
-      ],
-      "name": "Foobara::BuiltinTypes::String::Casters::Symbol",
-      "processor_type": "caster"
-    },
-    "associative_array::Casters::Array": {
-      "scoped_path": [
-        "Casters",
-        "Array"
-      ],
-      "scoped_name": "Casters::Array",
-      "scoped_short_name": "Array",
-      "scoped_prefix": [
-        "Casters"
-      ],
-      "scoped_full_path": [
-        "associative_array",
-        "Casters",
-        "Array"
-      ],
-      "scoped_full_name": "associative_array::Casters::Array",
-      "scoped_category": "processor_class",
-      "reference": "associative_array::Casters::Array",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "type",
-        "associative_array"
-      ],
-      "name": "Foobara::BuiltinTypes::AssociativeArray::Casters::Array",
+      "name": "Foobara::BuiltinTypes::Integer::Casters::String",
       "processor_type": "caster"
     },
     "number::SupportedValidators::Max": {
@@ -1718,7 +1647,148 @@
         "number::SupportedValidators::Min::BelowMinimumError"
       ]
     },
-    "integer::Casters::String": {
+    "string::Casters::Numeric": {
+      "scoped_path": [
+        "Casters",
+        "Numeric"
+      ],
+      "scoped_name": "Casters::Numeric",
+      "scoped_short_name": "Numeric",
+      "scoped_prefix": [
+        "Casters"
+      ],
+      "scoped_full_path": [
+        "string",
+        "Casters",
+        "Numeric"
+      ],
+      "scoped_full_name": "string::Casters::Numeric",
+      "scoped_category": "processor_class",
+      "reference": "string::Casters::Numeric",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "string"
+      ],
+      "name": "Foobara::BuiltinTypes::String::Casters::Numeric",
+      "processor_type": "caster"
+    },
+    "string::Casters::Symbol": {
+      "scoped_path": [
+        "Casters",
+        "Symbol"
+      ],
+      "scoped_name": "Casters::Symbol",
+      "scoped_short_name": "Symbol",
+      "scoped_prefix": [
+        "Casters"
+      ],
+      "scoped_full_path": [
+        "string",
+        "Casters",
+        "Symbol"
+      ],
+      "scoped_full_name": "string::Casters::Symbol",
+      "scoped_category": "processor_class",
+      "reference": "string::Casters::Symbol",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "string"
+      ],
+      "name": "Foobara::BuiltinTypes::String::Casters::Symbol",
+      "processor_type": "caster"
+    },
+    "string::SupportedTransformers::Downcase": {
+      "scoped_path": [
+        "SupportedTransformers",
+        "Downcase"
+      ],
+      "scoped_name": "SupportedTransformers::Downcase",
+      "scoped_short_name": "Downcase",
+      "scoped_prefix": [
+        "SupportedTransformers"
+      ],
+      "scoped_full_path": [
+        "string",
+        "SupportedTransformers",
+        "Downcase"
+      ],
+      "scoped_full_name": "string::SupportedTransformers::Downcase",
+      "scoped_category": "processor_class",
+      "reference": "string::SupportedTransformers::Downcase",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "string"
+      ],
+      "name": "Foobara::BuiltinTypes::String::SupportedTransformers::Downcase",
+      "processor_type": "transformer"
+    },
+    "string::SupportedValidators::Matches": {
+      "scoped_path": [
+        "SupportedValidators",
+        "Matches"
+      ],
+      "scoped_name": "SupportedValidators::Matches",
+      "scoped_short_name": "Matches",
+      "scoped_prefix": [
+        "SupportedValidators"
+      ],
+      "scoped_full_path": [
+        "string",
+        "SupportedValidators",
+        "Matches"
+      ],
+      "scoped_full_name": "string::SupportedValidators::Matches",
+      "scoped_category": "processor_class",
+      "reference": "string::SupportedValidators::Matches",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "string"
+      ],
+      "name": "Foobara::BuiltinTypes::String::SupportedValidators::Matches",
+      "processor_type": "transformer",
+      "error_classes": [
+        "string::SupportedValidators::Matches::DoesNotMatchError"
+      ]
+    },
+    "string::SupportedValidators::MaxLength": {
+      "scoped_path": [
+        "SupportedValidators",
+        "MaxLength"
+      ],
+      "scoped_name": "SupportedValidators::MaxLength",
+      "scoped_short_name": "MaxLength",
+      "scoped_prefix": [
+        "SupportedValidators"
+      ],
+      "scoped_full_path": [
+        "string",
+        "SupportedValidators",
+        "MaxLength"
+      ],
+      "scoped_full_name": "string::SupportedValidators::MaxLength",
+      "scoped_category": "processor_class",
+      "reference": "string::SupportedValidators::MaxLength",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "type",
+        "string"
+      ],
+      "name": "Foobara::BuiltinTypes::String::SupportedValidators::MaxLength",
+      "processor_type": "transformer",
+      "error_classes": [
+        "string::SupportedValidators::MaxLength::MaxLengthExceededError"
+      ]
+    },
+    "symbol::Casters::String": {
       "scoped_path": [
         "Casters",
         "String"
@@ -1729,98 +1799,24 @@
         "Casters"
       ],
       "scoped_full_path": [
-        "integer",
+        "symbol",
         "Casters",
         "String"
       ],
-      "scoped_full_name": "integer::Casters::String",
+      "scoped_full_name": "symbol::Casters::String",
       "scoped_category": "processor_class",
-      "reference": "integer::Casters::String",
+      "reference": "symbol::Casters::String",
       "domain": "global_organization::global_domain",
       "organization": "global_organization",
       "parent": [
         "type",
-        "integer"
+        "symbol"
       ],
-      "name": "Foobara::BuiltinTypes::Integer::Casters::String",
+      "name": "Foobara::BuiltinTypes::Symbol::Casters::String",
       "processor_type": "caster"
     }
   },
   "type": {
-    "attributes": {
-      "scoped_path": [
-        "attributes"
-      ],
-      "scoped_name": "attributes",
-      "scoped_short_name": "attributes",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "attributes"
-      ],
-      "scoped_full_name": "attributes",
-      "scoped_category": "type",
-      "reference": "attributes",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "domain",
-        "global_organization::global_domain"
-      ],
-      "declaration_data": {
-        "type": "attributes"
-      },
-      "possible_errors": {
-        "data.cannot_cast": {
-          "category": "data",
-          "symbol": "cannot_cast",
-          "key": "data.cannot_cast",
-          "error": "Foobara::Value::Processor::Casting::CannotCastError",
-          "processor_class": "Foobara::Value::Processor::Casting",
-          "processor_manifest_data": {
-            "casting": {
-              "cast_to": {
-                "type": "attributes"
-              }
-            }
-          }
-        }
-      },
-      "name": "attributes",
-      "types_depended_on": [
-        "array",
-        "associative_array",
-        "duck",
-        "symbol"
-      ],
-      "description": "Built-in attributes type",
-      "base_type": "associative_array",
-      "supported_casters": [
-        "duck::SupportedCasters::AllowNil"
-      ],
-      "supported_transformers": [
-        "attributes::SupportedTransformers::Defaults"
-      ],
-      "supported_validators": [
-        "attributes::SupportedValidators::Required",
-        "duck::SupportedValidators::InstanceOf",
-        "duck::SupportedValidators::OneOf"
-      ],
-      "supported_processors": [
-        "associative_array::SupportedProcessors::KeyTypeDeclaration",
-        "associative_array::SupportedProcessors::ValueTypeDeclaration",
-        "attributes::SupportedProcessors::ElementTypeDeclarations"
-      ],
-      "processors": {
-        "casters": [
-          "attributes::Casters::array",
-          "attributes::Casters::hash"
-        ],
-        "caster_classes": [
-          "attributes::Casters::Array",
-          "attributes::Casters::Hash"
-        ]
-      }
-    },
     "array": {
       "scoped_path": [
         "array"
@@ -1888,203 +1884,6 @@
         ],
         "caster_classes": [
           "array::Casters::Arrayable"
-        ]
-      }
-    },
-    "symbol": {
-      "scoped_path": [
-        "symbol"
-      ],
-      "scoped_name": "symbol",
-      "scoped_short_name": "symbol",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "symbol"
-      ],
-      "scoped_full_name": "symbol",
-      "scoped_category": "type",
-      "reference": "symbol",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "domain",
-        "global_organization::global_domain"
-      ],
-      "declaration_data": {
-        "type": "symbol"
-      },
-      "possible_errors": {
-        "data.cannot_cast": {
-          "category": "data",
-          "symbol": "cannot_cast",
-          "key": "data.cannot_cast",
-          "error": "Foobara::Value::Processor::Casting::CannotCastError",
-          "processor_class": "Foobara::Value::Processor::Casting",
-          "processor_manifest_data": {
-            "casting": {
-              "cast_to": {
-                "type": "symbol"
-              }
-            }
-          }
-        }
-      },
-      "name": "symbol",
-      "target_classes": [
-        "Symbol"
-      ],
-      "types_depended_on": [
-        "array",
-        "atomic_duck",
-        "attributes",
-        "duck"
-      ],
-      "description": "Built-in symbol type",
-      "base_type": "atomic_duck",
-      "supported_casters": [
-        "duck::SupportedCasters::AllowNil"
-      ],
-      "supported_validators": [
-        "duck::SupportedValidators::InstanceOf",
-        "duck::SupportedValidators::OneOf"
-      ],
-      "processors": {
-        "casters": [
-          "symbol::Casters::string"
-        ],
-        "caster_classes": [
-          "symbol::Casters::String"
-        ]
-      }
-    },
-    "duck": {
-      "scoped_path": [
-        "duck"
-      ],
-      "scoped_name": "duck",
-      "scoped_short_name": "duck",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "duck"
-      ],
-      "scoped_full_name": "duck",
-      "scoped_category": "type",
-      "reference": "duck",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "domain",
-        "global_organization::global_domain"
-      ],
-      "declaration_data": {
-        "type": "duck"
-      },
-      "possible_errors": {
-        "data.cannot_cast": {
-          "category": "data",
-          "symbol": "cannot_cast",
-          "key": "data.cannot_cast",
-          "error": "Foobara::Value::Processor::Casting::CannotCastError",
-          "processor_class": "Foobara::Value::Processor::Casting",
-          "processor_manifest_data": {
-            "casting": {
-              "cast_to": {
-                "type": "duck"
-              }
-            }
-          }
-        }
-      },
-      "name": "duck",
-      "target_classes": [
-        "Object"
-      ],
-      "types_depended_on": [
-        "array",
-        "attributes",
-        "symbol"
-      ],
-      "description": "Built-in duck type",
-      "base_type": null,
-      "supported_casters": [
-        "duck::SupportedCasters::AllowNil"
-      ],
-      "supported_validators": [
-        "duck::SupportedValidators::InstanceOf",
-        "duck::SupportedValidators::OneOf"
-      ]
-    },
-    "string": {
-      "scoped_path": [
-        "string"
-      ],
-      "scoped_name": "string",
-      "scoped_short_name": "string",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "string"
-      ],
-      "scoped_full_name": "string",
-      "scoped_category": "type",
-      "reference": "string",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "domain",
-        "global_organization::global_domain"
-      ],
-      "declaration_data": {
-        "type": "string"
-      },
-      "possible_errors": {
-        "data.cannot_cast": {
-          "category": "data",
-          "symbol": "cannot_cast",
-          "key": "data.cannot_cast",
-          "error": "Foobara::Value::Processor::Casting::CannotCastError",
-          "processor_class": "Foobara::Value::Processor::Casting",
-          "processor_manifest_data": {
-            "casting": {
-              "cast_to": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
-      "name": "string",
-      "target_classes": [
-        "String"
-      ],
-      "types_depended_on": [
-        "array",
-        "atomic_duck",
-        "attributes",
-        "duck",
-        "symbol"
-      ],
-      "description": "Built-in string type",
-      "base_type": "atomic_duck",
-      "supported_casters": [
-        "duck::SupportedCasters::AllowNil"
-      ],
-      "supported_transformers": [
-        "string::SupportedTransformers::Downcase"
-      ],
-      "supported_validators": [
-        "duck::SupportedValidators::InstanceOf",
-        "duck::SupportedValidators::OneOf",
-        "string::SupportedValidators::Matches",
-        "string::SupportedValidators::MaxLength"
-      ],
-      "processors": {
-        "casters": [
-          "string::Casters::numeric",
-          "string::Casters::symbol"
-        ],
-        "caster_classes": [
-          "string::Casters::Numeric",
-          "string::Casters::Symbol"
         ]
       }
     },
@@ -2159,64 +1958,6 @@
         ]
       }
     },
-    "duckture": {
-      "scoped_path": [
-        "duckture"
-      ],
-      "scoped_name": "duckture",
-      "scoped_short_name": "duckture",
-      "scoped_prefix": null,
-      "scoped_full_path": [
-        "duckture"
-      ],
-      "scoped_full_name": "duckture",
-      "scoped_category": "type",
-      "reference": "duckture",
-      "domain": "global_organization::global_domain",
-      "organization": "global_organization",
-      "parent": [
-        "domain",
-        "global_organization::global_domain"
-      ],
-      "declaration_data": {
-        "type": "duckture"
-      },
-      "possible_errors": {
-        "data.cannot_cast": {
-          "category": "data",
-          "symbol": "cannot_cast",
-          "key": "data.cannot_cast",
-          "error": "Foobara::Value::Processor::Casting::CannotCastError",
-          "processor_class": "Foobara::Value::Processor::Casting",
-          "processor_manifest_data": {
-            "casting": {
-              "cast_to": {
-                "type": "duckture"
-              }
-            }
-          }
-        }
-      },
-      "name": "duckture",
-      "target_classes": [
-        "Object"
-      ],
-      "types_depended_on": [
-        "array",
-        "attributes",
-        "duck",
-        "symbol"
-      ],
-      "description": "Built-in duckture type",
-      "base_type": "duck",
-      "supported_casters": [
-        "duck::SupportedCasters::AllowNil"
-      ],
-      "supported_validators": [
-        "duck::SupportedValidators::InstanceOf",
-        "duck::SupportedValidators::OneOf"
-      ]
-    },
     "atomic_duck": {
       "scoped_path": [
         "atomic_duck"
@@ -2266,6 +2007,195 @@
         "symbol"
       ],
       "description": "Built-in atomic_duck type",
+      "base_type": "duck",
+      "supported_casters": [
+        "duck::SupportedCasters::AllowNil"
+      ],
+      "supported_validators": [
+        "duck::SupportedValidators::InstanceOf",
+        "duck::SupportedValidators::OneOf"
+      ]
+    },
+    "attributes": {
+      "scoped_path": [
+        "attributes"
+      ],
+      "scoped_name": "attributes",
+      "scoped_short_name": "attributes",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "attributes"
+      ],
+      "scoped_full_name": "attributes",
+      "scoped_category": "type",
+      "reference": "attributes",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "domain",
+        "global_organization::global_domain"
+      ],
+      "declaration_data": {
+        "type": "attributes"
+      },
+      "possible_errors": {
+        "data.cannot_cast": {
+          "category": "data",
+          "symbol": "cannot_cast",
+          "key": "data.cannot_cast",
+          "error": "Foobara::Value::Processor::Casting::CannotCastError",
+          "processor_class": "Foobara::Value::Processor::Casting",
+          "processor_manifest_data": {
+            "casting": {
+              "cast_to": {
+                "type": "attributes"
+              }
+            }
+          }
+        }
+      },
+      "name": "attributes",
+      "types_depended_on": [
+        "array",
+        "associative_array",
+        "duck",
+        "symbol"
+      ],
+      "description": "Built-in attributes type",
+      "base_type": "associative_array",
+      "supported_casters": [
+        "duck::SupportedCasters::AllowNil"
+      ],
+      "supported_transformers": [
+        "attributes::SupportedTransformers::Defaults"
+      ],
+      "supported_validators": [
+        "attributes::SupportedValidators::Required",
+        "duck::SupportedValidators::InstanceOf",
+        "duck::SupportedValidators::OneOf"
+      ],
+      "supported_processors": [
+        "associative_array::SupportedProcessors::KeyTypeDeclaration",
+        "associative_array::SupportedProcessors::ValueTypeDeclaration",
+        "attributes::SupportedProcessors::ElementTypeDeclarations"
+      ],
+      "processors": {
+        "casters": [
+          "attributes::Casters::array",
+          "attributes::Casters::hash"
+        ],
+        "caster_classes": [
+          "attributes::Casters::Array",
+          "attributes::Casters::Hash"
+        ]
+      }
+    },
+    "duck": {
+      "scoped_path": [
+        "duck"
+      ],
+      "scoped_name": "duck",
+      "scoped_short_name": "duck",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "duck"
+      ],
+      "scoped_full_name": "duck",
+      "scoped_category": "type",
+      "reference": "duck",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "domain",
+        "global_organization::global_domain"
+      ],
+      "declaration_data": {
+        "type": "duck"
+      },
+      "possible_errors": {
+        "data.cannot_cast": {
+          "category": "data",
+          "symbol": "cannot_cast",
+          "key": "data.cannot_cast",
+          "error": "Foobara::Value::Processor::Casting::CannotCastError",
+          "processor_class": "Foobara::Value::Processor::Casting",
+          "processor_manifest_data": {
+            "casting": {
+              "cast_to": {
+                "type": "duck"
+              }
+            }
+          }
+        }
+      },
+      "name": "duck",
+      "target_classes": [
+        "Object"
+      ],
+      "types_depended_on": [
+        "array",
+        "attributes",
+        "symbol"
+      ],
+      "description": "Built-in duck type",
+      "base_type": null,
+      "supported_casters": [
+        "duck::SupportedCasters::AllowNil"
+      ],
+      "supported_validators": [
+        "duck::SupportedValidators::InstanceOf",
+        "duck::SupportedValidators::OneOf"
+      ]
+    },
+    "duckture": {
+      "scoped_path": [
+        "duckture"
+      ],
+      "scoped_name": "duckture",
+      "scoped_short_name": "duckture",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "duckture"
+      ],
+      "scoped_full_name": "duckture",
+      "scoped_category": "type",
+      "reference": "duckture",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "domain",
+        "global_organization::global_domain"
+      ],
+      "declaration_data": {
+        "type": "duckture"
+      },
+      "possible_errors": {
+        "data.cannot_cast": {
+          "category": "data",
+          "symbol": "cannot_cast",
+          "key": "data.cannot_cast",
+          "error": "Foobara::Value::Processor::Casting::CannotCastError",
+          "processor_class": "Foobara::Value::Processor::Casting",
+          "processor_manifest_data": {
+            "casting": {
+              "cast_to": {
+                "type": "duckture"
+              }
+            }
+          }
+        }
+      },
+      "name": "duckture",
+      "target_classes": [
+        "Object"
+      ],
+      "types_depended_on": [
+        "array",
+        "attributes",
+        "duck",
+        "symbol"
+      ],
+      "description": "Built-in duckture type",
       "base_type": "duck",
       "supported_casters": [
         "duck::SupportedCasters::AllowNil"
@@ -2404,10 +2334,150 @@
         "number::SupportedValidators::Max",
         "number::SupportedValidators::Min"
       ]
+    },
+    "string": {
+      "scoped_path": [
+        "string"
+      ],
+      "scoped_name": "string",
+      "scoped_short_name": "string",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "string"
+      ],
+      "scoped_full_name": "string",
+      "scoped_category": "type",
+      "reference": "string",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "domain",
+        "global_organization::global_domain"
+      ],
+      "declaration_data": {
+        "type": "string"
+      },
+      "possible_errors": {
+        "data.cannot_cast": {
+          "category": "data",
+          "symbol": "cannot_cast",
+          "key": "data.cannot_cast",
+          "error": "Foobara::Value::Processor::Casting::CannotCastError",
+          "processor_class": "Foobara::Value::Processor::Casting",
+          "processor_manifest_data": {
+            "casting": {
+              "cast_to": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "name": "string",
+      "target_classes": [
+        "String"
+      ],
+      "types_depended_on": [
+        "array",
+        "atomic_duck",
+        "attributes",
+        "duck",
+        "symbol"
+      ],
+      "description": "Built-in string type",
+      "base_type": "atomic_duck",
+      "supported_casters": [
+        "duck::SupportedCasters::AllowNil"
+      ],
+      "supported_transformers": [
+        "string::SupportedTransformers::Downcase"
+      ],
+      "supported_validators": [
+        "duck::SupportedValidators::InstanceOf",
+        "duck::SupportedValidators::OneOf",
+        "string::SupportedValidators::Matches",
+        "string::SupportedValidators::MaxLength"
+      ],
+      "processors": {
+        "casters": [
+          "string::Casters::numeric",
+          "string::Casters::symbol"
+        ],
+        "caster_classes": [
+          "string::Casters::Numeric",
+          "string::Casters::Symbol"
+        ]
+      }
+    },
+    "symbol": {
+      "scoped_path": [
+        "symbol"
+      ],
+      "scoped_name": "symbol",
+      "scoped_short_name": "symbol",
+      "scoped_prefix": null,
+      "scoped_full_path": [
+        "symbol"
+      ],
+      "scoped_full_name": "symbol",
+      "scoped_category": "type",
+      "reference": "symbol",
+      "domain": "global_organization::global_domain",
+      "organization": "global_organization",
+      "parent": [
+        "domain",
+        "global_organization::global_domain"
+      ],
+      "declaration_data": {
+        "type": "symbol"
+      },
+      "possible_errors": {
+        "data.cannot_cast": {
+          "category": "data",
+          "symbol": "cannot_cast",
+          "key": "data.cannot_cast",
+          "error": "Foobara::Value::Processor::Casting::CannotCastError",
+          "processor_class": "Foobara::Value::Processor::Casting",
+          "processor_manifest_data": {
+            "casting": {
+              "cast_to": {
+                "type": "symbol"
+              }
+            }
+          }
+        }
+      },
+      "name": "symbol",
+      "target_classes": [
+        "Symbol"
+      ],
+      "types_depended_on": [
+        "array",
+        "atomic_duck",
+        "attributes",
+        "duck"
+      ],
+      "description": "Built-in symbol type",
+      "base_type": "atomic_duck",
+      "supported_casters": [
+        "duck::SupportedCasters::AllowNil"
+      ],
+      "supported_validators": [
+        "duck::SupportedValidators::InstanceOf",
+        "duck::SupportedValidators::OneOf"
+      ],
+      "processors": {
+        "casters": [
+          "symbol::Casters::string"
+        ],
+        "caster_classes": [
+          "symbol::Casters::String"
+        ]
+      }
     }
   },
   "metadata": {
     "url": "http://localhost:9292/manifest",
-    "when": "2024-08-02 13:01:41 -0700"
+    "when": "2024-08-23 14:59:51 -0700"
   }
 }

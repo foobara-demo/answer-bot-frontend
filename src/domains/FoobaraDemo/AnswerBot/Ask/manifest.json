@@ -57,11 +57,21 @@
               "question": {
                 "description": "whatever you want to know!",
                 "type": "string"
+              },
+              "service": {
+                "one_of": [
+                  "open-ai",
+                  "anthropic"
+                ],
+                "type": "string"
               }
             },
             "required": [
               "question"
-            ]
+            ],
+            "defaults": {
+              "service": "open-ai"
+            }
           }
         }
       }
@@ -108,6 +118,41 @@
         ]
       }
     },
+    "data.service.cannot_cast": {
+      "path": [
+        "service"
+      ],
+      "category": "data",
+      "symbol": "cannot_cast",
+      "key": "data.service.cannot_cast",
+      "error": "Foobara::Value::Processor::Casting::CannotCastError",
+      "processor_manifest_data": {
+        "casting": {
+          "cast_to": {
+            "one_of": [
+              "open-ai",
+              "anthropic"
+            ],
+            "type": "string"
+          }
+        }
+      }
+    },
+    "data.service.value_not_valid": {
+      "path": [
+        "service"
+      ],
+      "category": "data",
+      "symbol": "value_not_valid",
+      "key": "data.service.value_not_valid",
+      "error": "duck::SupportedValidators::OneOf::ValueNotValidError",
+      "processor_manifest_data": {
+        "one_of": [
+          "open-ai",
+          "anthropic"
+        ]
+      }
+    },
     "data.unexpected_attributes": {
       "category": "data",
       "symbol": "unexpected_attributes",
@@ -119,22 +164,43 @@
           "question": {
             "description": "whatever you want to know!",
             "type": "string"
+          },
+          "service": {
+            "one_of": [
+              "open-ai",
+              "anthropic"
+            ],
+            "type": "string"
           }
         }
       }
     }
   },
+  "depends_on": [
+    "Foobara::Ai::AnthropicApi::CreateMessage",
+    "FoobaraDemo::OpenAiApi::CreateChatCompletion"
+  ],
   "inputs_type": {
     "type": "attributes",
     "element_type_declarations": {
       "question": {
         "description": "whatever you want to know!",
         "type": "string"
+      },
+      "service": {
+        "one_of": [
+          "open-ai",
+          "anthropic"
+        ],
+        "type": "string"
       }
     },
     "required": [
       "question"
-    ]
+    ],
+    "defaults": {
+      "service": "open-ai"
+    }
   },
   "description": "Ask a question and receive the knowledge you seek.",
   "result_type": {

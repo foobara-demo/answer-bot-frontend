@@ -23,5 +23,9 @@
   ],
   "types": [
 
+  ],
+  "depends_on": [
+    "Foobara::Ai::AnthropicApi",
+    "FoobaraDemo::OpenAiApi"
   ]
 }

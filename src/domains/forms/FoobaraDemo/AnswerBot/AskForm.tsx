@@ -10,6 +10,8 @@ import { type Error as AskError } from '../../../FoobaraDemo/AnswerBot/Ask/Error
 export default function AskForm (): JSX.Element {
   const [question, setQuestion] = useState<string | undefined>(undefined)
 
+  const [service, setService] = useState<'open-ai' | 'anthropic'>('open-ai')
+
   const [result, setResult] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -25,8 +27,14 @@ export default function AskForm (): JSX.Element {
       return
     }
 
+    if (service == null) {
+      // TODO: perform some kind of validation error
+      return
+    }
+
     const inputs: AskInputs = {
-      question
+      question,
+      service
     }
 
     const command = new Ask(inputs)
@@ -58,6 +66,13 @@ export default function AskForm (): JSX.Element {
           onChange={(e) => { setQuestion(e.target.value) }}
           placeholder="question"
                   />
+
+        <select
+          value={service ?? ''}
+          onChange={(e) => { setService(e.target.value as 'open-ai' | 'anthropic') }}
+                >
+          <option value="open-ai">open-ai</option><option value="anthropic">anthropic</option>
+        </select>
 
         <button onClick={run}>Ask</button>
       </div>

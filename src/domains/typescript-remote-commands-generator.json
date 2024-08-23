@@ -19,5 +19,6 @@
   "base/processors/Foobara/Value/Processor/CannotCastError.ts",
   "base/processors/attributes/SupportedProcessors/UnexpectedAttributesError.ts",
   "base/processors/attributes/SupportedValidators/MissingRequiredAttributeError.ts",
+  "base/processors/duck/SupportedValidators/ValueNotValidError.ts",
   "manifest.json"
 ]
